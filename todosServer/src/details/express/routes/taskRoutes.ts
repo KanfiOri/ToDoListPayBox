@@ -24,7 +24,9 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
         path: '/createTask',
         handler: async (req, res) => {
             const taskName = req.body.taskName;
-            const taskDeadline = req.body.taskDeadline;
+            const taskDeadline = req.body.taskDeadLine;
+            console.log('taskName: ', taskName)
+            console.log('taskDEadLine: ', taskDeadline)
             if(taskName && taskDeadline) {
                 try {
                     await TaskDataProvider.createTask(taskName, taskDeadline)
@@ -40,8 +42,8 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
     })
 
     createRoute(router, {
-        type: 'put',
-        path: '/deleteTask',
+        type: 'delete',
+        path: '/deleteTask/:id',
         handler: async (req, res) => {
             const taskId: number = req.params.id;
             try{
@@ -56,7 +58,7 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
 
     createRoute(router, {
         type: 'put',
-        path: '/editTask',
+        path: '/editTask/:id',
         handler: async (req, res) => {
             const taskId: number = req.params.id;
             const taskName = req.body.taskName;
@@ -80,4 +82,5 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
         }
     })
 
+    return router;
 }
