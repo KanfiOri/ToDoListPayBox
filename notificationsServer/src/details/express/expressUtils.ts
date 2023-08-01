@@ -8,6 +8,10 @@ interface iCreateRouteParams {
 
 export const createRoute = (router: Router, { type, path, handler }: iCreateRouteParams) => {
     router[type](path, async (req, res) => {
-        await handler(req, res)
+        try{
+            await handler(req, res)
+        } catch(e) {
+            res.status(500).send(e.message)
+        }
     })
 }
