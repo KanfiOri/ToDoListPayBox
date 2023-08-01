@@ -1,4 +1,4 @@
-export interface DalResponseTaskInList {
-    taskName: string,
-    taskDeadline: string
-}
+// export interface DalResponseTaskInList {
+//     taskName: string,
+//     taskDeadline: string
+// }

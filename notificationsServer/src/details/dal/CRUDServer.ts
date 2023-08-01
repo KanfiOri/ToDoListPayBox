@@ -1,6 +1,8 @@
 import { iDataProvider } from "logic/interfaces/dataProvider";
+import { createTaskDataProvider } from "./notificationCRUDServer";
 
 export const createCRUDServerDal = ():iDataProvider => {
-    
-    return
+    return {
+        NotificationDataProvider: createTaskDataProvider()
+    }
 }

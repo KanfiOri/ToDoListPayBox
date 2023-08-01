@@ -5,15 +5,15 @@ import { iDataProvider } from "logic/interfaces/dataProvider";
 import { createTaskRoutes } from "./routes/taskRoutes";
 
 // For now dataProvider is in ? but i will handel it later.
-export const  expressInit = (dataProvider: iDataProvider) => {
+export const expressInit = (dataProvider: iDataProvider) => {
     const app = express()
     const router = Router()
     app.use(cors())
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json({ limit: '50mb' }))
-    
+
     app.get('/check', (req, res) => {
-        res.send('Hello World :)')
+        res.send({ system: 'crud-server', status: 'ok' })
     })
 
     app.use('/task', createTaskRoutes(router, dataProvider))

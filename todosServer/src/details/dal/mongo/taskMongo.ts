@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 // Should be cahanged - I dont want here the type any...
 export const createTaskDataProvider = (db: any): iTaskDataProvider => {
     return {
-        getAll: async (): Promise<DalResponseTaskInList[]> => {
+        getAll: async (): Promise<Task[]> => {
             const collection = db.collection('Tasks')
             const tasks:DalResponseTaskInList[] = await collection.find({}).toArray();
             return tasks

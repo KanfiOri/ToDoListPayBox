@@ -1,3 +1,5 @@
+import { createCRUDServerDal } from "details/dal/CRUDServer";
 import { expressInit } from "./details/express/express";
 
-expressInit()
+const CRUDServerDataProvider = createCRUDServerDal()
+expressInit(CRUDServerDataProvider)
