@@ -1,13 +1,12 @@
 export interface iDataProvider {
-    NotificationDataProvider: iNotificationDataProvider;
+    NotificationDataProvider: notifcationsDataProvider;
 }
 
-export interface iNotificationDataProvider {
-    getAll: () => Promise<tasksInList[]>
-    sendNotifications: () => Promise<void>
+export interface notifcationsDataProvider {
+    getAllDeadlines: () => Promise<TaskDeadline[]>,
+    sendNotification: () => Promise<void>
 }   
 
-export interface tasksInList {
-    taskName: string;
-    taskDeadline: string;
+export interface TaskDeadline {
+    deadline: string;
 }
