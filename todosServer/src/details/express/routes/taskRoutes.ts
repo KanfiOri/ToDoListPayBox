@@ -30,7 +30,7 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
             if(taskName && taskDeadline) {
                 try {
                     await TaskDataProvider.createTask(taskName, taskDeadline)
-                    res.status(201).send('State updated in DataBase')
+                    res.status(201).send('Task updated in DataBase')
                 } 
                 catch(err) {
                     throw new Error(`An Error accure while creating new task. ${err}`)
@@ -65,12 +65,16 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
             const taskDeadline = req.body.taskDeadline;
             if(taskName || taskDeadline) {
                 try{
-                    if(taskId && taskName) {
+                    if(taskName && taskDeadline) {
                         await TaskDataProvider.editTask(taskId, taskName, taskDeadline)
-                    } else if(taskId) {
-                        await TaskDataProvider.editTask(taskId, taskName)
+                        res.status(202).send(`Task editted`)
+                    } else if(taskName) {
+                        await TaskDataProvider.editTask(taskId)
+                        res.status(202).send(`Task editted`)
                     } else {
-                        await TaskDataProvider.editTask(taskId, taskDeadline)
+                        console.log('TaskDeadline: ', taskDeadline)
+                        await TaskDataProvider.editTask(taskDeadline)
+                        res.status(202).send(`Task editted`)
                     }
                 } 
                 catch {
