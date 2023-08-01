@@ -1,3 +1,5 @@
+import { createMongoDal } from "./details/dal/mongo/mongo";
 import { expressInit } from "./details/express/express";
 
-expressInit()
+const mongoDataProvider = createMongoDal()
+expressInit(mongoDataProvider)
