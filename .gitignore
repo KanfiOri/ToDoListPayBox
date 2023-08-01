@@ -1,2 +1,4 @@
 node_modules/
 dist/
+todoServer/src/common
+notificationServer/src/common

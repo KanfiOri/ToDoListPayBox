@@ -1,87 +1,58 @@
 import { Router } from "express"
-import { iDataProvider } from "logic/interfaces/dataProvider"
+import { Task, iDataProvider } from "logic/interfaces/dataProvider"
 import { createRoute } from "../expressUtils";
+import { taskLogic } from "../../../logic/entityLogic/taskLogic";
 
 export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
-    const { TaskDataProvider } = dataProvider;
-
     createRoute(router, {
         type: 'get',
         path: '/getAll',
         handler: async (req, res) => {
-            try {
-                const allTasks = await TaskDataProvider.getAll();
-                res.send(allTasks);
-            } 
-            catch(err) {
-                throw new Error(`An error accured while fetching all the tasks. ${err}`)
-            }
+            const result: Task[] = await taskLogic.getAll(dataProvider)
+            res.send(result)
         }
     })
 
     createRoute(router, {
         type: 'post',
-        path: '/createTask',
+        path: '/create',
         handler: async (req, res) => {
-            const taskName = req.body.taskName;
-            const taskDeadline = req.body.taskDeadLine;
-            console.log('taskName: ', taskName)
-            console.log('taskDEadLine: ', taskDeadline)
-            if(taskName && taskDeadline) {
-                try {
-                    await TaskDataProvider.createTask(taskName, taskDeadline)
-                    res.status(201).send('Task updated in DataBase')
-                } 
-                catch(err) {
-                    throw new Error(`An Error accure while creating new task. ${err}`)
-                }
-            } else {
-                res.status(400).send(`Body must contain taskName and taskDeadLine`)
+            const name = req.body.taskName;
+            const deadline = req.body.taskDeadLine;
+            const task: Task = { name, deadline }
+            if (task.name) {
+                await taskLogic.createTask(dataProvider, task);
+                res.status(200).send('success')
+            }
+            else {
+                throw new Error('Body must conatin name')
             }
         }
     })
 
     createRoute(router, {
         type: 'delete',
-        path: '/deleteTask/:id',
+        path: '/delete/:id',
         handler: async (req, res) => {
             const taskId: number = req.params.id;
-            try{
-                await TaskDataProvider.deleteTask(taskId)
-                res.status(202).send(`Task deleted from DataBase`)
-            } 
-            catch(err) {
-                throw new Error(`An error accure while deleting a task. ${err}`)
-            }
+            await taskLogic.deleteTask(dataProvider, taskId)
+            res.status(200).send('succeed')
         }
     })
 
     createRoute(router, {
         type: 'put',
-        path: '/editTask/:id',
+        path: '/edit/:id',
         handler: async (req, res) => {
-            const taskId: number = req.params.id;
-            const taskName = req.body.taskName;
-            const taskDeadline = req.body.taskDeadline;
-            if(taskName || taskDeadline) {
-                try{
-                    if(taskName && taskDeadline) {
-                        await TaskDataProvider.editTask(taskId, taskName, taskDeadline)
-                        res.status(202).send(`Task editted`)
-                    } else if(taskName) {
-                        await TaskDataProvider.editTask(taskId)
-                        res.status(202).send(`Task editted`)
-                    } else {
-                        console.log('TaskDeadline: ', taskDeadline)
-                        await TaskDataProvider.editTask(taskDeadline)
-                        res.status(202).send(`Task editted`)
-                    }
-                } 
-                catch {
-                    throw new Error('An error accured while editing a task')
-                }
+            const id: number = req.params.id;
+            const name = req.body.taskName;
+            const deadline = req.body.taskDeadline;
+            const task: Task = { id, name, deadline }
+            if(task.name && task.deadline) {
+                await taskLogic.editTask(dataProvider, task)
+                res.status(200).send('succeed')
             } else {
-                res.status(400).send('There is no Data to update (Body must contain taskName or taskDeadline')
+                throw new Error('Body must contain task name and task deadline')
             }
         }
     })

@@ -1,5 +1,4 @@
-import { DalResponseTaskInList } from "logic/interfaces/dalTypes";
-import { iTaskDataProvider } from "logic/interfaces/dataProvider";
+import { Task, iTaskDataProvider } from "logic/interfaces/dataProvider";
 import { ObjectId } from "mongodb";
 
 // Should be cahanged - I dont want here the type any...
@@ -7,14 +6,14 @@ export const createTaskDataProvider = (db: any): iTaskDataProvider => {
     return {
         getAll: async (): Promise<Task[]> => {
             const collection = db.collection('Tasks')
-            const tasks:DalResponseTaskInList[] = await collection.find({}).toArray();
+            const tasks:Task[] = await collection.find({}).toArray();
             return tasks
         },
-        createTask: async (taskName: string, taskDeadline: string) => {
+        createTask: async ({name, deadline}: Task) => {
             const collection = db.collection('Tasks')
             const newTask = {
-                taskName: taskName,
-                taskDeadline: taskDeadline,
+                taskName: name,
+                taskDeadline: deadline,
               };
             await collection.insertOne(newTask);
         },
@@ -23,25 +22,13 @@ export const createTaskDataProvider = (db: any): iTaskDataProvider => {
             const objectIdTaskId = new ObjectId(taskId);
             await collection.deleteOne({ _id: objectIdTaskId });
         },
-        editTask: async(taskId: number, taskName?: string, taskDeadLine?: string) => {
+        editTask: async({id, name, deadline}: Task) => {
             const collection = db.collection('Tasks')
-            const objectIdTaskId = new ObjectId(taskId);
-            if(taskName && taskDeadLine) {
+            const objectIdTaskId = new ObjectId(id);
                 await collection.updateOne(
                   { _id: objectIdTaskId },
-                  { $set: { taskName: taskName, taskDeadline: taskDeadLine } }
+                  { $set: { taskName: name, taskDeadline: deadline } }
                 );
-            } else if(taskName) {
-                await collection.updateOne(
-                    { _id: objectIdTaskId },
-                    { $set: { taskName: taskName } }
-                  );
-            } else {
-                await collection.updateOne(
-                    { _id: objectIdTaskId },
-                    { $set: { taskDeadline: taskDeadLine } }
-                  );
-            }
         }
     }
 }
