@@ -3,13 +3,8 @@ export interface iDataProvider {
 }
 
 export interface iTaskDataProvider {
-    getAll: () => Promise<tasksInList[]>
-    createTask: (taskName: string, taskDeadLine: string) => Promise<void>
-    deleteTask: (id: number) => Promise<void>
-    editTask: (id: number, taskName?: string, taskDeadLine?: string) => Promise<void>
+    getAll: () => Promise<Task[]>
+    createTask: (task: Task) => Promise<void>
+    deleteTask: (taskId: string) => Promise<void>
+    editTask: (task: Task) => Promise<void>
 }   
-
-export interface tasksInList {
-    taskName: string;
-    taskDeadline: string;
-}
