@@ -2,32 +2,42 @@ import { iDataProvider } from "../../logic/interfaces/dataProvider";
 
 const TRIGGER = 1000;
 
-export function createNotificationsLogic(dataProvider: iDataProvider) {
+const sendNotification = async () => {
+    console.log('This function already been implemented');
+}
 
+export function createNotificationsLogic(dataProvider: iDataProvider) {
     setInterval(() => {
         notificationTrigger();
     }, TRIGGER);
 
-    const getAllDeadlines = async () => {
+    const getAll = async () => {
         return await dataProvider.NotificationDataProvider.getAll()
     }
 
     const notificationTrigger = async () => {
         try {
-            const tasks = await getAllDeadlines();
+            const tasks = await getAll();
             const date = (new Date()).getTime();
-            // Promise.all(tasks).then((values) => {
-            //     values.
-            // })
             tasks.forEach((task) => {
                 if (task.deadline < date && !task.isExpired) {
-                    dataProvider.NotificationDataProvider.sendNotification()
-                    dataProvider.NotificationDataProvider.updateIsExpired(task.id)
+                    try {
+                        sendNotification()
+                        console.log('taskName: ', task.name)
+                        console.log('task.isExpired: ', task.isExpired)
+                    } catch(e) {
+                        throw new Error(`sendNotification does not work: ${e.message}`)
+                    }
+                    try {
+                        console.log('is Exoired happening')
+                        dataProvider.NotificationDataProvider.updateIsExpired(task._id)
+                    } catch(e) {
+                        console.error('isExpired cant be updated in DB: ',(e))
+                    }
                 }
             })
-        } catch {
-
+        } catch(e) {
+            console.error('All tasks cannot be fetched: ', (e))
         }
-
     }
 }

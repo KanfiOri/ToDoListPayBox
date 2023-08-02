@@ -1,4 +1,5 @@
-import { Task, iTaskDataProvider } from "logic/interfaces/dataProvider";
+import { Task } from "common/entites/entities";
+import { iTaskDataProvider } from "logic/interfaces/dataProvider";
 import { ObjectId } from "mongodb";
 
 // Should be cahanged - I dont want here the type any...
@@ -12,6 +13,7 @@ export const createTaskDataProvider = (db: any): iTaskDataProvider => {
         createTask: async ({name, deadline, isExpired}: Task) => {
             const collection = db.collection('Tasks')
             const newTask: Task = {
+                _id: null,
                 name,
                 deadline,
                 isExpired
@@ -23,13 +25,22 @@ export const createTaskDataProvider = (db: any): iTaskDataProvider => {
             const objectIdTaskId = new ObjectId(taskId);
             await collection.deleteOne({ _id: objectIdTaskId });
         },
-        editTask: async({id, name, deadline, isExpired}: Task) => {
+        updateName: async(_id: number, name: string) => {
             const collection = db.collection('Tasks')
-            const objectIdTaskId = new ObjectId(id);
+            const objectIdTaskId = new ObjectId(_id);
                 await collection.updateOne(
                   { _id: objectIdTaskId },
-                  { $set: { name, deadline, isExpired } }
+                  { $set: { name } }
                 );
-        }
+        },
+        updateDeadline: async(_id: number, deadline: number) => {
+            const collection = db.collection('Tasks')
+            const objectIdTaskId = new ObjectId(_id);
+            await collection.updateOne(
+                { _id: objectIdTaskId },
+                { $set: { deadline } }
+              );
+            
+        },
     }
 }

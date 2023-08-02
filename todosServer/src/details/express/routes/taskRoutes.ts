@@ -1,7 +1,8 @@
 import { Router } from "express"
-import { Task, iDataProvider } from "logic/interfaces/dataProvider"
+import { iDataProvider } from "logic/interfaces/dataProvider"
 import { createRoute } from "../expressUtils";
 import { taskLogic } from "../../../logic/entityLogic/taskLogic";
+import { Task } from "common/entites/entities";
 
 export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
     createRoute(router, {
@@ -19,7 +20,7 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
         handler: async (req, res) => {
             const name: string = req.body.name;
             const deadline: number = req.body.deadline;
-            const task: Task = { name, deadline, isExpired: false }
+            const task: Task = { _id: null, name, deadline, isExpired: false }
             if (task.name) {
                 await taskLogic.createTask(dataProvider, task);
                 res.status(200).send('success')
@@ -42,17 +43,30 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
 
     createRoute(router, {
         type: 'put',
-        path: '/edit/:id',
+        path: '/:id/name',
         handler: async (req, res) => {
             const id: number = req.params.id;
             const name: string = req.body.name;
-            const deadline: number = req.body.deadline;
-            const task: Task = { id, name, deadline, isExpired: false }
-            if(task.name && task.deadline) {
-                await taskLogic.editTask(dataProvider, task)
+            if(name) {
+                await taskLogic.updateName(dataProvider, id, name)
                 res.status(200).send('succeed')
             } else {
-                throw new Error('Body must contain task name and task deadline')
+                throw new Error('Body must contain task name')
+            }
+        }
+    })
+
+    createRoute(router, {
+        type: 'put',
+        path: '/:id/deadline',
+        handler: async (req, res) => {
+            const id: number = req.params.id;
+            const deadline: number = req.body.deadline;
+            if(deadline) {
+                await taskLogic.updateDeadline(dataProvider, id, deadline)
+                res.status(200).send('succeed')
+            } else {
+                throw new Error('Body must contain task deadline')
             }
         }
     })

@@ -1,4 +1,5 @@
-import { Task, notifcationsDataProvider } from "../../../logic/interfaces/dataProvider";
+import { Task } from "common/entites/entities";
+import { notifcationsDataProvider } from "../../../logic/interfaces/dataProvider";
 
 export const createDeadlineDataProvider = (db: any): notifcationsDataProvider => {
     return {
@@ -9,12 +10,9 @@ export const createDeadlineDataProvider = (db: any): notifcationsDataProvider =>
         },
         updateIsExpired: async (id: number) => {
             const collection = db.collection('Tasks');
-            collection('tasks').updateOne(
+            await collection.updateOne(
                 { _id: id },
-                { $set: { expiredDate: true } })
+                { $set: { isExpired: true } })
         },
-        sendNotification: async () => {
-            console.log('This function already been implemented');
-        }
     }
 }

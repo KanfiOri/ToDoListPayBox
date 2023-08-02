@@ -17,6 +17,7 @@ export const  expressInit = (dataProvider: iDataProvider) => {
 
     createNotificationsLogic(dataProvider);
     setupServer(app)
+    // dataProvider.cleanUp()
 }
 
 

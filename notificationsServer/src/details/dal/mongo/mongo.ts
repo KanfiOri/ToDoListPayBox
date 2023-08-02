@@ -14,7 +14,18 @@ export const createMongoDal = ():iDataProvider => {
       }
     }
     connectDB();
+
+    const cleanup = async () => {
+      try {
+        await client.close();
+        console.log('Connection to MongoDB closed.');
+      } catch (err) {
+        console.error('Error closing MongoDB connection:', err);
+      }
+    }
+
     return {
-        NotificationDataProvider: createDeadlineDataProvider(client.db('ToDoList'))
+        NotificationDataProvider: createDeadlineDataProvider(client.db('ToDoList')),
+        cleanUp: cleanup,
     }
 }
