@@ -18,4 +18,3 @@ export const createMongoDal = ():iDataProvider => {
         NotificationDataProvider: createDeadlineDataProvider(client.db('ToDoList'))
     }
 }
-

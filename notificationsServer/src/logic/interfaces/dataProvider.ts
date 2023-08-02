@@ -3,10 +3,15 @@ export interface iDataProvider {
 }
 
 export interface notifcationsDataProvider {
-    getAllDeadlines: () => Promise<TaskDeadline[]>,
-    sendNotification: () => Promise<void>
+    getAll: () => Promise<Task[]>,
+    updateIsExpired: (id: number) => Promise<void>;
+    sendNotification: () => Promise<void>;
 }   
 
-export interface TaskDeadline {
-    deadline: string;
+export interface Task {
+    //In case of createTask o dont need id mongo generate one.
+    id?: number,
+    name: string;
+    deadline: number;
+    isExpired: boolean;
 }

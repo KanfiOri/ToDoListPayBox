@@ -17,9 +17,9 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
         type: 'post',
         path: '/create',
         handler: async (req, res) => {
-            const name = req.body.taskName;
-            const deadline = req.body.taskDeadLine;
-            const task: Task = { name, deadline }
+            const name: string = req.body.name;
+            const deadline: number = req.body.deadline;
+            const task: Task = { name, deadline, isExpired: false }
             if (task.name) {
                 await taskLogic.createTask(dataProvider, task);
                 res.status(200).send('success')
@@ -34,8 +34,8 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
         type: 'delete',
         path: '/delete/:id',
         handler: async (req, res) => {
-            const taskId: number = req.params.id;
-            await taskLogic.deleteTask(dataProvider, taskId)
+            const id: number = req.params.id;
+            await taskLogic.deleteTask(dataProvider, id)
             res.status(200).send('succeed')
         }
     })
@@ -45,9 +45,9 @@ export const createTaskRoutes = (router, dataProvider: iDataProvider) => {
         path: '/edit/:id',
         handler: async (req, res) => {
             const id: number = req.params.id;
-            const name = req.body.taskName;
-            const deadline = req.body.taskDeadline;
-            const task: Task = { id, name, deadline }
+            const name: string = req.body.name;
+            const deadline: number = req.body.deadline;
+            const task: Task = { id, name, deadline, isExpired: false }
             if(task.name && task.deadline) {
                 await taskLogic.editTask(dataProvider, task)
                 res.status(200).send('succeed')

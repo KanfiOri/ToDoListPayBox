@@ -9,11 +9,12 @@ export const createTaskDataProvider = (db: any): iTaskDataProvider => {
             const tasks:Task[] = await collection.find({}).toArray();
             return tasks
         },
-        createTask: async ({name, deadline}: Task) => {
+        createTask: async ({name, deadline, isExpired}: Task) => {
             const collection = db.collection('Tasks')
-            const newTask = {
-                taskName: name,
-                taskDeadline: deadline,
+            const newTask: Task = {
+                name,
+                deadline,
+                isExpired
               };
             await collection.insertOne(newTask);
         },
@@ -22,12 +23,12 @@ export const createTaskDataProvider = (db: any): iTaskDataProvider => {
             const objectIdTaskId = new ObjectId(taskId);
             await collection.deleteOne({ _id: objectIdTaskId });
         },
-        editTask: async({id, name, deadline}: Task) => {
+        editTask: async({id, name, deadline, isExpired}: Task) => {
             const collection = db.collection('Tasks')
             const objectIdTaskId = new ObjectId(id);
                 await collection.updateOne(
                   { _id: objectIdTaskId },
-                  { $set: { taskName: name, taskDeadline: deadline } }
+                  { $set: { name, deadline, isExpired } }
                 );
         }
     }
