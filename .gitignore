@@ -1,4 +1,4 @@
 node_modules/
 dist/
-todoServer/src/common
-notificationServer/src/common
+crud-server/src/common/
+notification-server/src/common/
