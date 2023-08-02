@@ -1,6 +1,5 @@
 export interface Task {
-    _id: number | null,
+    _id: string,
     name: string;
     deadline: number;
-    isExpired: boolean;
 }

@@ -1,12 +1,11 @@
+import { Task } from "common/entites/entities";
+
 export interface iDataProvider {
     NotificationDataProvider: notifcationsDataProvider;
+    cleanUp: () => Promise<void>
 }
 
 export interface notifcationsDataProvider {
-    getAllDeadlines: () => Promise<TaskDeadline[]>,
-    sendNotification: () => Promise<void>
-}   
-
-export interface TaskDeadline {
-    deadline: string;
-}
+    getAll: () => Promise<Task[]>,
+    updateIsExpired: (id: number) => Promise<void>;
+}  
