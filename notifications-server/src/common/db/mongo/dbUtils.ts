@@ -12,8 +12,7 @@ export async function transaction<Type>(client: MongoClient, callback: (collecti
 
         return res;
 
-    } catch (err) {
-        throw err
-    } finally {
+    } catch (error) {
+        throw error
     }
 }
